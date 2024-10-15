@@ -1,0 +1,91 @@
+---
+title: "Leprosy Cases"
+subtitle: "Homework 2 SDS"
+output: 
+  html_document
+date: "2024-09-19"
+author: Mika Ohayon- SDS 313 UT Austin
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+
+# *Dataset information*
+
+ *The data set contains values pertaining to the number of new cases of leprosy in 2022, population, GDP (billions of US \$), land area and the region.*
+
+```{r, echo=FALSE}
+
+lep <- read.csv("Homework2_leprosy.csv")
+```
+
+# **1: Country with the highest # of leprosy cases in 2022**
+
+India had the largest amount of leprosy cases in 2022 with 103819 cases. However, it is not a fair comparison to look purely at the number of cases when comparing prevalence of the disease across different countries as India has the largest population overall therefore it will have a greater number amount of cases rather than the greatest proportion of cases.
+
+```{r, echo=FALSE, results='hide'}
+max(lep$New_Cases, na.rm=TRUE)
+lep[which(lep$New_Cases==max(lep$New_Cases, na.rm=TRUE)),]
+```
+
+# **2: Leprosy cases per 100K people in each country**
+
+The graph below shows the distribution of leprosy cases per 100k people in each country.
+```{r, echo=FALSE, results='hide'}
+casesPer100 <- (lep$New_Cases / (lep$Population/100000))
+lep$casesPer100<- casesPer100
+
+library(ggplot2)
+
+lep_ggplot <- ggplot(lep)
+
+lep_ggplot + geom_histogram(aes(x=casesPer100), binswidth=30)+labs(title='Frequency of Leprosy Cases Per 100K people', x="Leprosy Cases Per 100K", y= 'Frequency')
+
+median100<- round(median(casesPer100, na.rm=TRUE), 2)
+IQR<-IQR(casesPer100, na.rm=TRUE)
+```
+
+The graph portraying the amount of cases per 100K people shows a strong skew to the right, implying that there is a higher frequenycy of low numbers of cases per 100k people with median rounding to rounding to  `r median100` and an Interquartile range of `r IQR`
+
+# **3 Cases per 100K across the different world regions**
+
+```{r, echo=FALSE, results='hide'}
+library(dplyr)
+library(readr)
+lep_ggplot+ geom_histogram (aes(x=casesPer100))+ facet_wrap(~Region)
+
+```
+
+The following table displays a summary of leprosy cases in prospective of the different world regions. The table shows ,median number of cases as well as the number of countries within each region.
+
+The graphs all show a right skew with a higher frequency in the low number of cases. According to the graph and taable, Africa has the highest median of leprosy cases, followed by Asia/pacific , then the Americas, then the middle east, with europe having the lowest median of leprosy cases.
+
+```{r, echo=FALSE}
+
+new_lep<-lep%>%
+  group_by(Region)%>%
+  summarise(
+    num_countries=n(),
+    median_cases=median(casesPer100, na.rm=TRUE)
+  )
+new_lep
+
+```
+
+# **4: Is the amount of Leprosy cases/ 100K people related to a countries GDP(US Dollars)?**
+
+The relationship between leprosy cases leprosy cases per 100k people and the GDP (US Dollars) of a country is very low as the correlation coefficient is `r round(cor(lep$casesPer100, lep$GDP_billions, use="complete.obs"), digits=2)` . The correlation coefficient is very small and rounds to 0, therefore indicating that there is close to no relationship between GDP and cases per 100K people.
+
+```{r, echo=FALSE}
+cc<-round(cor(lep$casesPer100, lep$GDP_billions, use="complete.obs"), digits=2)
+
+lep_ggplot + geom_point(aes(x=casesPer100, y=GDP_billions)) + labs(x="Cases per 100K", y = "GDP (Billions)", title = "Relationship Between Cases and GDP")
+
+
+```
+
+# **5: Conclusion**
+
+Through my analysis I found that countries with a higher population are likely to have more leprosy cases than those with lower populations. Specifically countries within Asia/pacific and Africa have the highest frequency of cases than any other place in the world. I also discovered that GDP (US Dollars) does not correlate to the number of cases of leprosy per country which was interesting. For more information regarding leprosy, you may visit [International Leprosy Association](https://www.bing.com/ck/a?!&&p=ab0a608bc1406b77JmltdHM9MTcyNjc5MDQwMCZpZ3VpZD0wODEwMTkyYi0yZDcxLTZhMmItMTUwZS0wYmEwMmNmZjZiZGMmaW5zaWQ9NTE5NA&ptn=3&ver=2&hsh=3&fclid=0810192b-2d71-6a2b-150e-0ba02cff6bdc&psq=International+Leprosy+Association&u=a1aHR0cHM6Ly93d3cuaW50ZXJuYXRpb25hbGxlcHJvc3lhc3NvY2lhdGlvbi5vcmcv&ntb=1).
