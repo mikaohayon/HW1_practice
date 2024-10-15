@@ -10,7 +10,7 @@ author: Mika Ohayon- SDS 313 UT Austin
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 ```
-
+# mika is the coolest person ik. i wuv her
 
 # *Dataset information*
 This is me creating an edit in this rmd. 
