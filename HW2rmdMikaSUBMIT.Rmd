@@ -13,7 +13,7 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 
 
 # *Dataset information*
-
+This is me creating an edit in this rmd. 
  *The data set contains values pertaining to the number of new cases of leprosy in 2022, population, GDP (billions of US \$), land area and the region.*
 
 ```{r, echo=FALSE}
