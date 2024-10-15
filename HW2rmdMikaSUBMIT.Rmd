@@ -11,7 +11,7 @@ author: Mika Ohayon- SDS 313 UT Austin
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 ```
 # mika is the coolest person ik. i wuv her
-
+# edit number 3
 # *Dataset information*
 This is me creating an edit in this rmd. 
  *The data set contains values pertaining to the number of new cases of leprosy in 2022, population, GDP (billions of US \$), land area and the region.*
